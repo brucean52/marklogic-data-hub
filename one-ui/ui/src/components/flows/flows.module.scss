@@ -1,0 +1,83 @@
+.flowsContainer {
+    min-width: 800px;
+
+    .createContainer {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        .createButton {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+    }
+
+    .deleteFlow {
+        color: #B32424;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .disabledDeleteIcon {
+        color: rgba(0, 0, 0, 0.65);
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .flowName {
+        color: #3f4692;
+        cursor: pointer;
+    }
+
+    .disabledFlowName {
+        color: #3f4692;
+        cursor: not-allowed;
+    }
+
+    .panelContent {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+
+        .actions {
+            .run {
+                position: relative;
+                top: 1px;
+                display: inline-block;
+                padding-right: 10px;
+                color: #3b458f;
+                font-size: 20px;
+                cursor: pointer;
+            }
+            .delete {
+                display: inline-block;
+                color: #7f86b5;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            .disabledDelete {
+                display: inline-block;
+                color: rgba(0, 0, 0, 0.65);
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+
+        .cardContent {
+            border: solid 1px #ddd;
+            padding: 10px;
+            .format {
+                display: inline-block;
+                margin-top: -3px;
+                margin-right: 10px;
+            }
+            .name {
+                display: inline-block;
+                margin-right: 10px;
+            }
+        }
+    }
+
+}
+
+
+

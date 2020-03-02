@@ -1,4 +1,20 @@
+<<<<<<< HEAD
 /cypress
 /documentation
 /jmeter
 /node_modules
+=======
+.dockerignore
+
+.DS_Store
+
+**/node_modules
+.gradle
+**/.gradle
+!**/build.gradle
+!**/settings.gradle
+
+.idea
+
+# **/build/*
+>>>>>>> dhf/explorer

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 version: "3.7"
 services:
   explorer-ui:
@@ -37,3 +38,21 @@ services:
       - MARKLOGIC_INIT=true
       - MARKLOGIC_ADMIN_USERNAME=${mlusername}
       - MARKLOGIC_ADMIN_PASSWORD=${mlpassword}
+=======
+version: '3'
+services:
+  marklogic:
+    image: "marklogiccommunity/marklogic-datahub:${ML_VERSION}"
+    build:
+      context: .
+      dockerfile: ./.travis/Dockerfile
+      args:
+        - MLBUILD_USER
+        - MLBUILD_PASSWORD
+        - ML_VERSION
+    ports:
+      - "5005:5005"
+      - "8000-8020:8000-8020"
+    volumes:
+      - .:/marklogic-data-hub
+>>>>>>> dhf/explorer
