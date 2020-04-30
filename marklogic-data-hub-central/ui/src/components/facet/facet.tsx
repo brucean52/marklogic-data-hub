@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Checkbox, Icon, Tooltip } from 'antd';
+import { Icon } from 'antd';
+import { MLCheckbox, MLTooltip } from '@marklogic/design-system';
 import { SearchContext } from '../../util/search-context';
 import styles from './facet.module.scss';
 import { numberConverter } from '../../util/number-conversion';
@@ -133,7 +134,7 @@ const Facet: React.FC<Props> = (props) => {
 
   const renderValues = checkedFacets.slice(0, showFacets).map((facet, index) =>
     <div className={styles.checkContainer} key={index} data-cy={stringConverter(props.name) + "-facet-item"}>
-      <Checkbox
+      <MLCheckbox
         value={facet.value}
         onChange={(e) => handleClick(e)}
         checked={checked.includes(facet.value)}
@@ -141,8 +142,8 @@ const Facet: React.FC<Props> = (props) => {
         data-cy={stringConverter(props.name) + "-facet-item-checkbox"}
         data-testid={stringConverter(props.name) + "-" + facet + "-facet-item-checkbox"}
       >
-        <Tooltip title={facet.value}>{facet.value}</Tooltip>
-      </Checkbox>
+        <MLTooltip title={facet.value}>{facet.value}</MLTooltip>
+      </MLCheckbox>
       <div className={styles.count}
           data-cy={stringConverter(props.name) + "-facet-item-count"}>{numberConverter(facet.count)}</div>
     </div>
@@ -165,12 +166,12 @@ const Facet: React.FC<Props> = (props) => {
           className={styles.name}
           data-cy={stringConverter(props.name) + "-facet"}
         >
-          <Tooltip title={props.name}>{formatTitle()}</Tooltip>
-            <Tooltip
+          <MLTooltip title={props.name}>{formatTitle()}</MLTooltip>
+            <MLTooltip
               title={props.tooltip} placement="topLeft">
               {props.tooltip ?
                 <FontAwesomeIcon className={styles.infoIcon} icon={faInfoCircle} size="sm"/> : ''}
-            </Tooltip>
+            </MLTooltip>
         </div>
         <div className={styles.summary}>
           {checked.length > 0 ? <div className={styles.selected}
