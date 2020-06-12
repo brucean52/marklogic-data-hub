@@ -81,7 +81,7 @@ describe('Entity Modeling Property Table Component', () => {
     expect(getAllByText('Address')).toHaveLength(2);
     
     // Table expansion shipping property -> Address Structure type
-    userEvent.click(getAllByRole('button')[1]);
+    userEvent.click(getAllByRole('img')[0]);
 
     expect(getByTestId('add-struct-Zip')).toBeInTheDocument();
     expect(getAllByText(/zip/i)).toHaveLength(2);
@@ -89,13 +89,13 @@ describe('Entity Modeling Property Table Component', () => {
     expect(getAllByText('state')).toHaveLength(1);
 
     // Table expansion for shipping property -> Zip structure type
-    userEvent.click(getAllByRole('button')[2]);
+    userEvent.click(getAllByRole('img')[1]);
 
     expect(getByText('fiveDigit')).toBeInTheDocument();
     expect(getByText('plusFour')).toBeInTheDocument();
 
     // Table expansion for billing property, Address structure type
-    userEvent.click(getAllByRole('button')[3]);
+    userEvent.click(getAllByRole('img')[2]);
 
     expect(getAllByTestId('add-struct-Zip')).toHaveLength(2); 
     expect(getAllByText(/zip/i)).toHaveLength(4);
@@ -103,7 +103,7 @@ describe('Entity Modeling Property Table Component', () => {
     expect(getAllByText('state')).toHaveLength(2);
 
     // Table expansion for billing property -> Zip structure type
-    userEvent.click(getAllByRole('button')[4]);
+    userEvent.click(getAllByRole('img')[3]);
 
     expect(getAllByText('fiveDigit')).toHaveLength(2);
     expect(getAllByText('plusFour')).toHaveLength(2);
