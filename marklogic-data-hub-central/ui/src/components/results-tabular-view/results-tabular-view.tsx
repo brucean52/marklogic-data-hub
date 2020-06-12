@@ -90,6 +90,7 @@ const ResultsTabularView = (props) => {
            dataSource={dataSource}
            columns={tableHeaders}
            pagination={false}
+           scroll={{y: 400}}
         />
             </div>
         </>
