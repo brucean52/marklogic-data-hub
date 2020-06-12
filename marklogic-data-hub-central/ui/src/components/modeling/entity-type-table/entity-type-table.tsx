@@ -1,7 +1,7 @@
 import React, { useState, useEffect, CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { Table, Tooltip } from 'antd';
-//import { MLTable, MLTooltip } from '@marklogic/design-system';
+import { MLTable, MLTooltip } from '@marklogic/design-system';
 import { faUndo, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from './entity-type-table.module.scss';
@@ -206,7 +206,7 @@ const EntityTypeTable: React.FC<Props> = (props) => {
   });
 
   return (
-    <Table
+    <MLTable
       rowKey="name"
       locale={{ emptyText: ' ' }}
       className={styles.table}

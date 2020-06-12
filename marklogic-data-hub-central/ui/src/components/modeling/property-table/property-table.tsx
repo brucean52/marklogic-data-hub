@@ -403,7 +403,7 @@ const PropertyTable: React.FC<Props> = (props) => {
         addPropertyToDefinition={addPropertyToDefinition}
         addStructuredTypeToDefinition={addStructuredTypeToDefinition}
       />
-      <Table
+      <MLTable
         rowClassName={(record) => record.propertyName}
         locale={{ emptyText: ' ' }}
         columns={headerColumns}
