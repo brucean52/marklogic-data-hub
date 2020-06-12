@@ -7,8 +7,8 @@ import '@testing-library/jest-dom/extend-expect'
 import TilesView from './TilesView';
 import {AuthoritiesContext, AuthoritiesService} from '../util/authorities';
 import axiosMock from 'axios';
-import mocks from '../config/mocks.config';
-import authorities from '../config/authorities.config';
+import mocks from '../api/__mocks__/mocks.data';
+import authorities from '../assets/authorities.testutils';
 
 jest.mock('axios');
 
@@ -124,6 +124,28 @@ describe('Tiles View component tests for Developer user', () => {
             expect(queryByLabelText("title-"+tileId)).not.toBeInTheDocument();
         });
 
+    });
+
+    test('Verify Curate tile with customRead authority', async () => {
+        const authorityService = new AuthoritiesService();
+        authorityService.setAuthorities(['readCustom']);
+        const { getByLabelText, queryByText, getByText } = render(<Router history={history}><AuthoritiesContext.Provider value={authorityService}><TilesView/></AuthoritiesContext.Provider></Router>);
+
+        // Curate tile not shown initially
+        expect(queryByText("icon-curate")).not.toBeInTheDocument();
+        expect(queryByText("title-curate")).not.toBeInTheDocument();
+
+        fireEvent.click(getByLabelText("tool-curate"));
+
+        // Curate tile shown with entityTypes after click
+        expect(await(waitForElement(() => getByLabelText("icon-curate")))).toBeInTheDocument();
+        expect(getByLabelText("title-curate")).toBeInTheDocument();
+
+        // test cannot access Mapping tab
+        fireEvent.click(getByText('Customer'));
+        expect(queryByText('Mapping')).not.toBeInTheDocument();
+
+        //TODO test that custom tab is available when implemented
     });
 
     test('Verify Run tile displays from toolbar', async () => {
