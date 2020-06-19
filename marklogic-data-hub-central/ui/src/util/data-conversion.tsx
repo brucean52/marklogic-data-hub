@@ -662,7 +662,7 @@ export const definitionsParser = (definitions: any): Definition[] => {
       required: [],
       wordLexicon: [],
       properties: []
-    };
+    };;
 
     let entityProperties: Property[] = [];
 
