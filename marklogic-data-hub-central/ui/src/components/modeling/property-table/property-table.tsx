@@ -810,6 +810,7 @@ const PropertyTable: React.FC<Props> = (props) => {
         confirmAction={confirmAction}
       />
       <MLTable
+        draggableRows
         rowClassName={(record) => {
           let propertyName = record.hasOwnProperty('add') && record.add !== '' ? record.add.split(',').join('-') : record.propertyName;
           return props.entityName + '-' + propertyName
