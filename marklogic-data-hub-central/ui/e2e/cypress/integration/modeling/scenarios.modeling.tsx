@@ -40,13 +40,13 @@ describe('Entity Modeling', () => {
     propertyModal.getNoRadio('identifier').click();
     propertyModal.getYesRadio('multiple').click();
     propertyModal.getYesRadio('pii').click();
-    propertyModal.clickCheckbox('wildcard');
+    //propertyModal.clickCheckbox('wildcard');
     propertyModal.clickCheckbox('facetable');
     propertyModal.getSubmitButton().click();
 
     propertyTable.getMultipleIcon('newID').should('exist');
     propertyTable.getPiiIcon('newID').should('exist');
-    propertyTable.getWildcardIcon('newID').should('exist');
+    //propertyTable.getWildcardIcon('newID').should('exist');
     propertyTable.getFacetIcon('newID').should('exist');
 
     propertyTable.editProperty('lname');
@@ -108,12 +108,12 @@ describe('Entity Modeling', () => {
     propertyModal.getYesRadio('identifier').click();
     propertyModal.getYesRadio('multiple').click();
     propertyModal.getNoRadio('pii').click();
-    propertyModal.clickCheckbox('wildcard');
+    //propertyModal.clickCheckbox('wildcard');
     propertyModal.getSubmitButton().click();
 
     propertyTable.getIdentifierIcon('newId').should('exist');
     propertyTable.getMultipleIcon('newId').should('exist');
-    propertyTable.getWildcardIcon('newId').should('exist');
+    //propertyTable.getWildcardIcon('newId').should('exist');
 
     // add basic type with identifier, show confirmation modal
     propertyTable.getAddPropertyButton('Product').click();
@@ -145,7 +145,7 @@ describe('Entity Modeling', () => {
     propertyTable.getMultipleIcon('user-id').should('exist');
     propertyTable.getIdentifierIcon('user-id').should('not.exist');
     propertyTable.getPiiIcon('user-id').should('not.exist');
-    propertyTable.getWildcardIcon('user-id').should('not.exist');
+    //propertyTable.getWildcardIcon('user-id').should('not.exist');
 
     propertyTable.editProperty('newId');
     propertyModal.getDeleteIcon('newId').click();
@@ -198,12 +198,12 @@ describe('Entity Modeling', () => {
 
     propertyModal.getNoRadio('multiple').click();
     propertyModal.getYesRadio('pii').click();
-    propertyModal.clickCheckbox('wildcard');
+    //propertyModal.clickCheckbox('wildcard');
     propertyModal.getSubmitButton().click();
 
     propertyTable.getMultipleIcon('street').should('not.exist');
     propertyTable.getPiiIcon('street').should('exist');
-    propertyTable.getWildcardIcon('street').should('exist');
+    //propertyTable.getWildcardIcon('street').should('exist');
 
     // add structured property to structured type
     propertyTable.getAddPropertyToStructureType('Address').click({ force: true });
@@ -221,7 +221,7 @@ describe('Entity Modeling', () => {
 
     propertyTable.getMultipleIcon('zip').should('exist');
     propertyTable.getPiiIcon('zip').should('not.exist');
-    propertyTable.getWildcardIcon('zip').should('not.exist');
+    //propertyTable.getWildcardIcon('zip').should('not.exist');
 
     // add properties to nested structured type
     propertyTable.getAddPropertyToStructureType('Zip').should('exist').trigger('mouseover');
@@ -237,7 +237,7 @@ describe('Entity Modeling', () => {
 
     propertyTable.getMultipleIcon('code').should('not.exist');
     propertyTable.getPiiIcon('code').should('not.exist');
-    propertyTable.getWildcardIcon('code').should('not.exist');
+    //propertyTable.getWildcardIcon('code').should('not.exist');
 
     // Test for additional nesting of structured types
     propertyTable.getAddPropertyToStructureType('Zip').click({ force: true });
@@ -259,13 +259,13 @@ describe('Entity Modeling', () => {
     propertyModal.openPropertyDropdown();
     propertyModal.getTypeFromDropdown('integer').click();
     propertyModal.getYesRadio('pii').click();
-    propertyModal.clickCheckbox('wildcard');
+    //propertyModal.clickCheckbox('wildcard');
     propertyModal.getSubmitButton().click();
 
     propertyTable.expandNestedPropertyRow('User-extra-Zip-Extra');
     propertyTable.getMultipleIcon('fourDigit').should('not.exist');
     propertyTable.getPiiIcon('fourDigit').should('exist');
-    propertyTable.getWildcardIcon('fourDigit').should('exist');
+    //propertyTable.getWildcardIcon('fourDigit').should('exist');
 
     //Edit Property Structured Property
     propertyTable.editProperty('street');
@@ -284,12 +284,12 @@ describe('Entity Modeling', () => {
     propertyModal.getYesRadio('idenifier').should('not.exist');
     propertyModal.getYesRadio('multiple').click();
     propertyModal.getNoRadio('pii').click();
-    propertyModal.clickCheckbox('wildcard');
+    //propertyModal.clickCheckbox('wildcard');
     propertyModal.getSubmitButton().click();
 
     propertyTable.getMultipleIcon('streetAlt').should('exist');
     propertyTable.getPiiIcon('streetAlt').should('not.exist');
-    propertyTable.getWildcardIcon('streetAlt').should('exist');
+    //propertyTable.getWildcardIcon('streetAlt').should('exist');
 
     //rename property and change type from structured to relationship
     propertyTable.editProperty('address');
@@ -303,7 +303,7 @@ describe('Entity Modeling', () => {
     propertyModal.getYesRadio('multiple').click();
     propertyModal.getYesRadio('idenifier').should('not.exist');
     propertyModal.getYesRadio('pii').should('not.exist');
-    propertyModal.getCheckbox('wildcard').should('not.exist');
+    //propertyModal.getCheckbox('wildcard').should('not.exist');
 
     propertyModal.getSubmitButton().click();
 
@@ -392,11 +392,11 @@ describe('Entity Modeling', () => {
     propertyModal.getTypeFromDropdown('More number types').click();
     propertyModal.getCascadedTypeFromDropdown('byte').click();
     propertyModal.getYesRadio('identifier').click();
-    propertyModal.clickCheckbox('wildcard');
+    //propertyModal.clickCheckbox('wildcard');
     propertyModal.getSubmitButton().click();
 
     propertyTable.getIdentifierIcon('patientID').should('exist');
-    propertyTable.getWildcardIcon('patientID').should('exist');
+    //propertyTable.getWildcardIcon('patientID').should('exist');
 
     propertyTable.getAddPropertyButton('Patient').should('exist');
     propertyTable.getAddPropertyButton('Patient').click();

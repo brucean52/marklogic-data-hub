@@ -57,8 +57,8 @@ const DEFAULT_SELECTED_PROPERTY_OPTIONS: PropertyOptions = {
   multiple: '',
   pii: '',
   sort: false,
-  facetable: false,
-  wildcard: false
+  facetable: false
+  //wildcard: false
 }
 
 const DEFAULT_EDIT_PROPERTY_OPTIONS: EditPropertyOptions = {
@@ -182,18 +182,18 @@ const PropertyTable: React.FC<Props> = (props) => {
         return text && <FontAwesomeIcon className={styles.facetIcon} icon={faCheck} data-testid={'facet-'+ text}/>
       }
     },
-    {
-      title: (
-        <MLTooltip title={ModelingTooltips.wildcard}>
-          <span aria-label="wildcard-header">Wildcard Search</span>
-        </MLTooltip>
-      ),
-      dataIndex: 'wildcard',
-      width: 150,
-      render: (text) => {
-        return text && <FontAwesomeIcon className={styles.wildcardIcon} icon={faCheck} data-testid={'wildcard-'+ text}/>
-      }
-    },
+    // {
+    //   title: (
+    //     <MLTooltip title={ModelingTooltips.wildcard}>
+    //       <span aria-label="wildcard-header">Wildcard Search</span>
+    //     </MLTooltip>
+    //   ),
+    //   dataIndex: 'wildcard',
+    //   width: 150,
+    //   render: (text) => {
+    //     return text && <FontAwesomeIcon className={styles.wildcardIcon} icon={faCheck} data-testid={'wildcard-'+ text}/>
+    //   }
+    // },
     {
       title: (
         <MLTooltip title={ModelingTooltips.pii}>
@@ -277,7 +277,7 @@ const PropertyTable: React.FC<Props> = (props) => {
     let entityDefinitionsArray = definitionsParser(definitions);
     let renderTableData = parseDefinitionsToTable(entityDefinitionsArray);
     if (entityDefinitionsArray.length === 1) {
-      setHeaderColumns(columns.slice(0, 9));
+      setHeaderColumns(columns.slice(0, 8));
     } else if (entityDefinitionsArray.length > 1) {
       setHeaderColumns(columns);
     }
@@ -403,15 +403,15 @@ const PropertyTable: React.FC<Props> = (props) => {
       entityTypeDefinition['pii'] = []
     }
 
-    if (propertyOptions.wildcard) {
-      if (entityTypeDefinition.hasOwnProperty('wordLexicon')) {
-        entityTypeDefinition['wordLexicon'].push(propertyName);
-      } else {
-        entityTypeDefinition['wordLexicon'] = [propertyName]
-      }
-    } else if (!entityTypeDefinition.hasOwnProperty('wordLexicon')) {
-      entityTypeDefinition['wordLexicon'] = []
-    }
+    // if (propertyOptions.wildcard) {
+    //   if (entityTypeDefinition.hasOwnProperty('wordLexicon')) {
+    //     entityTypeDefinition['wordLexicon'].push(propertyName);
+    //   } else {
+    //     entityTypeDefinition['wordLexicon'] = [propertyName]
+    //   }
+    // } else if (!entityTypeDefinition.hasOwnProperty('wordLexicon')) {
+    //   entityTypeDefinition['wordLexicon'] = []
+    // }
 
     if (!entityTypeDefinition.hasOwnProperty('required')) {
       entityTypeDefinition['required'] = []
@@ -489,8 +489,8 @@ const PropertyTable: React.FC<Props> = (props) => {
       multiple: record.multiple ? 'yes' : '',
       pii: record.pii ? 'yes' : '',
       sort: record.sort ? true : false,
-      facetable: record.facetable ? true : false,
-      wildcard: record.wildcard ? true : false
+      facetable: record.facetable ? true : false
+      //wildcard: record.wildcard ? true : false
     }
 
     const editPropertyOptions: EditPropertyOptions = {
@@ -536,22 +536,22 @@ const PropertyTable: React.FC<Props> = (props) => {
       }
     }
 
-    if (editPropertyOptions.propertyOptions.wildcard) {
-      let index = entityTypeDefinition.wordLexicon?.indexOf(propertyName);
-      if (index > -1) {
-        entityTypeDefinition.wordLexicon[index] = editPropertyOptions.name;
-      } else {
-        if (entityTypeDefinition.hasOwnProperty('wordLexicon')) {
-          entityTypeDefinition.wordLexicon.push(editPropertyOptions.name);
-        } else {
-          entityTypeDefinition.wordLexicon = [editPropertyOptions.name];
-        }      }
-    } else {
-      let index = entityTypeDefinition.wordLexicon?.indexOf(propertyName);
-      if (index > -1) {
-        entityTypeDefinition.wordLexicon.splice(index, 1);
-      }
-    }
+    // if (editPropertyOptions.propertyOptions.wildcard) {
+    //   let index = entityTypeDefinition.wordLexicon?.indexOf(propertyName);
+    //   if (index > -1) {
+    //     entityTypeDefinition.wordLexicon[index] = editPropertyOptions.name;
+    //   } else {
+    //     if (entityTypeDefinition.hasOwnProperty('wordLexicon')) {
+    //       entityTypeDefinition.wordLexicon.push(editPropertyOptions.name);
+    //     } else {
+    //       entityTypeDefinition.wordLexicon = [editPropertyOptions.name];
+    //     }      }
+    // } else {
+    //   let index = entityTypeDefinition.wordLexicon?.indexOf(propertyName);
+    //   if (index > -1) {
+    //     entityTypeDefinition.wordLexicon.splice(index, 1);
+    //   }
+    // }
 
     if (propertyName !== editPropertyOptions.name) {
       let reMapDefinition = Object.keys(entityTypeDefinition['properties']).map((key) => {
@@ -572,6 +572,10 @@ const PropertyTable: React.FC<Props> = (props) => {
       if (entityTypeDefinition.hasOwnProperty('elementRangeIndex') && entityTypeDefinition.elementRangeIndex.some(value => value ===  propertyName)) {
         let index = entityTypeDefinition.elementRangeIndex.indexOf(propertyName);
         entityTypeDefinition.elementRangeIndex[index] = editPropertyOptions.name;
+      }
+      if (entityTypeDefinition.hasOwnProperty('wordLexicon') && entityTypeDefinition.elementRangeIndex.some(value => value ===  propertyName)) {
+        let index = entityTypeDefinition.wordLexicon.indexOf(propertyName);
+        entityTypeDefinition.wordLexicon[index] = editPropertyOptions.name;
       }
     }
 
@@ -681,7 +685,7 @@ const PropertyTable: React.FC<Props> = (props) => {
                   identifier: entityTypeDefinition?.primaryKey === structProperty.name ? structProperty.name : '',
                   multiple: structProperty.multiple ? structProperty.name : '',
                   facetable: structProperty.facetable ? structProperty.name : '',
-                  wildcard: structuredType?.wordLexicon.some(value => value ===  structProperty.name) ? structProperty.name : '',
+                  //wildcard: structuredType?.wordLexicon.some(value => value ===  structProperty.name) ? structProperty.name : '',
                   pii: structuredType?.pii.some(value => value ===  structProperty.name) ? structProperty.name : '',
                   delete: entityTypeDefinition.name
                 }
@@ -721,7 +725,7 @@ const PropertyTable: React.FC<Props> = (props) => {
           identifier: entityTypeDefinition?.primaryKey === property.name ? property.name : '',
           multiple: property.multiple ? property.name : '',
           facetable: property.facetable ? property.name : '',
-          wildcard: entityTypeDefinition?.wordLexicon.some( value => value === property.name) ? property.name : '',
+          //wildcard: entityTypeDefinition?.wordLexicon.some( value => value === property.name) ? property.name : '',
           pii: entityTypeDefinition?.pii.some(value => value === property.name) ? property.name : '',
           add: '',
           delete: entityTypeDefinition.name

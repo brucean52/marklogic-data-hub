@@ -50,8 +50,8 @@ export interface PropertyOptions {
   multiple: string,
   pii: string,
   sort: boolean,
-  facetable: boolean,
-  wildcard: boolean
+  facetable: boolean
+  //wildcard: boolean
 }
 
 export enum ConfirmationType {
