@@ -9,7 +9,7 @@ type Props = {
   isVisible: boolean;
   type: ConfirmationType;
   boldTextArray: string[];
-  stepValues?: string[];
+  arrayValues?: string[];
   toggleModal: (isVisible: boolean) => void;
   confirmAction: () => void;
 };
@@ -38,7 +38,7 @@ const ConfirmationModal: React.FC<Props> = (props) => {
     }
   }
 
-  const renderSteps = props.stepValues?.map((step, index) => <li key={step + index}>{step}</li>);
+  const renderArrayValues = props.arrayValues?.map((item, index) => <li key={item + index}>{item}</li>);
 
   const modalFooter = <div className={styles.modalFooter}>
     <MLButton
@@ -101,6 +101,28 @@ const ConfirmationModal: React.FC<Props> = (props) => {
         </>
       )}
 
+      {props.type === ConfirmationType.DeleteEntityRelationshipOutstandingEditWarn && (
+        <>
+          <MLAlert
+            className={styles.alert}
+            closable={false}
+            description={"There are existing entity type relationships, and outstanding edits that need to be saved."}
+            showIcon
+            type="warning"
+          />
+          <p id="delete-relationship-edit-text">The <b>{props.boldTextArray[0]}</b> entity type is related to one or
+            more entity types. Deleting <b>{props.boldTextArray[0]}</b> will cause
+            those relationships to be removed from all involved entity types.</p>
+          <p>Also, before you can delete the <b>{props.boldTextArray[0]}</b> entity type, all changes to other entity
+            types must be saved first, in order to make changes to the whole entity model. This may include updating
+            indexes. Changes to the following entity types will be saved if you continue:</p>
+          <ul className={styles.stepList}>
+            {renderArrayValues}
+          </ul>
+          <p>OK to save these entity type changes before proceeding with deleting <b>{props.boldTextArray[0]}</b>?</p>
+        </>
+      )}
+
       {props.type === ConfirmationType.DeleteEntityStepWarn && (
         <>
           <MLAlert
@@ -119,7 +141,7 @@ const ConfirmationModal: React.FC<Props> = (props) => {
 
           {showSteps && (
             <ul className={styles.stepList}>
-              {renderSteps}
+              {renderArrayValues}
             </ul>
           )}
         </>
@@ -151,7 +173,7 @@ const ConfirmationModal: React.FC<Props> = (props) => {
 
           {showSteps && (
             <ul className={styles.stepList}>
-              {renderSteps}
+              {renderArrayValues}
             </ul>
           )}
           <p>Are you sure you want to delete the <b>{props.boldTextArray[0]}</b> property?</p>

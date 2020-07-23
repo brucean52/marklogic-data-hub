@@ -129,7 +129,7 @@ describe('Confirmation Modal Component', () => {
         isVisible={false}
         type={ConfirmationType.DeleteEntityStepWarn}
         boldTextArray={[entityName]} 
-        stepValues={stepValues}
+        arrayValues={stepValues}
         toggleModal={toggleModal}
         confirmAction={confirmAction}
       />
@@ -141,7 +141,7 @@ describe('Confirmation Modal Component', () => {
       isVisible={true}
       type={ConfirmationType.DeleteEntityStepWarn}
       boldTextArray={[entityName]} 
-      stepValues={stepValues}
+      arrayValues={stepValues}
       toggleModal={toggleModal}
       confirmAction={confirmAction}
     />);

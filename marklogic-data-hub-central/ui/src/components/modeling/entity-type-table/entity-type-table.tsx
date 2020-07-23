@@ -37,7 +37,7 @@ const EntityTypeTable: React.FC<Props> = (props) => {
 
   const [showConfirmModal, toggleConfirmModal] = useState(false);
   const [confirmBoldTextArray, setConfirmBoldTextArray] = useState<string[]>([]);
-  const [stepValuesArray, setStepValuesArray] = useState<string[]>([]);
+  const [arrayValues, setArrayValues] = useState<string[]>([]);
   const [confirmType, setConfirmType] = useState<ConfirmationType>(ConfirmationType.DeleteEntity);
   const [isAnyEntityModified, toggleAnyEntityModified] = useState(modelingOptions.isModified);
 
@@ -85,12 +85,17 @@ const EntityTypeTable: React.FC<Props> = (props) => {
 
         if (response['data']['stepAndMappingNames'].length > 0) {
           newConfirmType = ConfirmationType.DeleteEntityStepWarn;
+          setArrayValues(response['data']['stepAndMappingNames']);
         } else if (response['data']['entityNames'].length > 0) {
-          newConfirmType = ConfirmationType.DeleteEntityRelationshipWarn;
+          if (isAnyEntityModified) {
+            newConfirmType = ConfirmationType.DeleteEntityRelationshipOutstandingEditWarn;
+            setArrayValues(modelingOptions.modifiedEntitiesArray.map(entity => entity.entityName));
+          }
+          else {
+            newConfirmType = ConfirmationType.DeleteEntityRelationshipWarn;
+          }
         }
-
         setConfirmBoldTextArray([entityName]);
-        setStepValuesArray(response['data']['stepAndMappingNames']);
         setConfirmType(newConfirmType);
         toggleConfirmModal(true);
       }
@@ -132,9 +137,28 @@ const EntityTypeTable: React.FC<Props> = (props) => {
     }
   }
 
+  const saveAllEntitiesThenDeleteFromServer = async () => {
+    try {
+      const response = await updateEntityModels(modelingOptions.modifiedEntitiesArray).then(() => {
+        let entityName = confirmBoldTextArray.length ? confirmBoldTextArray[0] : '';
+        return deleteEntity(entityName);
+      });
+      debugger;
+      if (response['status'] === 200) {
+        clearEntityModified();
+      }
+    } catch (error) {
+      handleError(error)
+    } finally {
+      resetSessionTime();
+      toggleConfirmModal(false);
+      props.updateEntities();
+    }
+  }
+
   const confirmSaveEntity = (entityName: string) => {
     setConfirmBoldTextArray([entityName]);
-    setStepValuesArray([]);
+    setArrayValues([]);
     setConfirmType(ConfirmationType.SaveEntity);
     toggleConfirmModal(true);
   }
@@ -155,7 +179,7 @@ const EntityTypeTable: React.FC<Props> = (props) => {
 
   const confirmRevertEntity = (entityName: string) => {
     setConfirmBoldTextArray([entityName]);
-    setStepValuesArray([]);
+    setArrayValues([]);
     setConfirmType(ConfirmationType.RevertEntity);
     toggleConfirmModal(true);
   }
@@ -170,6 +194,9 @@ const EntityTypeTable: React.FC<Props> = (props) => {
     }
     else if (confirmType === ConfirmationType.RevertEntity) {
       revertEntity();
+    }
+    else if (confirmType === ConfirmationType.DeleteEntityRelationshipOutstandingEditWarn) {
+      saveAllEntitiesThenDeleteFromServer();
     }
     else {
       deleteEntityFromServer();
@@ -359,7 +386,7 @@ const EntityTypeTable: React.FC<Props> = (props) => {
         isVisible={showConfirmModal}
         type={confirmType}
         boldTextArray={confirmBoldTextArray}
-        stepValues={stepValuesArray}
+        arrayValues={arrayValues}
         toggleModal={toggleConfirmModal}
         confirmAction={confirmAction}
       />

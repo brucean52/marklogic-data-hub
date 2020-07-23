@@ -199,7 +199,7 @@ const Modeling: React.FC = () => {
         isVisible={showConfirmModal}
         type={confirmType}
         boldTextArray={[]} 
-        stepValues={[]}
+        arrayValues={[]}
         toggleModal={toggleConfirmModal}
         confirmAction={confirmAction}
       />
