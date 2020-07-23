@@ -111,7 +111,7 @@ const EntityTypeTable: React.FC<Props> = (props) => {
       let entityName = confirmBoldTextArray.length ? confirmBoldTextArray[0] : '';
       const response = await deleteEntity(entityName);
       if (response['status'] === 200) {
-        clearEntityModified();
+        clearEntityModified(); // this isn't correct. should be using update to remove only the deleted entity
       }
     } catch (error) {
       handleError(error)
@@ -139,20 +139,24 @@ const EntityTypeTable: React.FC<Props> = (props) => {
 
   const saveAllEntitiesThenDeleteFromServer = async () => {
     try {
-      const response = await updateEntityModels(modelingOptions.modifiedEntitiesArray).then(() => {
-        let entityName = confirmBoldTextArray.length ? confirmBoldTextArray[0] : '';
-        return deleteEntity(entityName);
-      });
-      debugger;
+      // don't mix async await and promises
+      const response = await updateEntityModels(modelingOptions.modifiedEntitiesArray)
+      let entityName = confirmBoldTextArray.length ? confirmBoldTextArray[0] : '';
+
       if (response['status'] === 200) {
         clearEntityModified();
+        try {
+          await deleteEntity(entityName);
+        } catch (error) {
+          handleError(error);
+        } finally {
+          resetSessionTime();
+          toggleConfirmModal(false);
+          props.updateEntities();
+        }
       }
     } catch (error) {
-      handleError(error)
-    } finally {
-      resetSessionTime();
-      toggleConfirmModal(false);
-      props.updateEntities();
+      handleError(error);
     }
   }
 
