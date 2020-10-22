@@ -55,3 +55,9 @@ export interface Threshold {
   action: string,
   score: number
 }
+
+export enum StepType {
+  Mapping = 'mapping',
+  Matching = 'matching',
+  Merging = 'merging'
+}

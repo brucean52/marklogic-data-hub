@@ -18,6 +18,7 @@ const EntityTiles = (props) => {
     const [viewData, setViewData] = useState<string[]>([]);
     const [mappingArtifacts, setMappingArtifacts] = useState<any[]>([]);
     const [matchingArtifacts, setMatchingArtifacts] = useState<any[]>([]);
+    const [mergingArtifacts, setMergingArtifacts] = useState<any[]>([]);
     const [customArtifactsWithEntity, setCustomArtifactsWithEntity] = useState<any[]>([]);
     const [customArtifactsWithoutEntity, setCustomArtifactsWithoutEntity] = useState<any[]>([]);
     const { canReadMapping, canWriteMapping } = props;
@@ -29,6 +30,7 @@ const EntityTiles = (props) => {
     useEffect(() => {
         getMappingArtifacts();
         getMatchingArtifacts();
+        getMergingArtifacts();
         getCustomArtifacts();
     },[isLoading]);
 
@@ -126,6 +128,7 @@ const EntityTiles = (props) => {
     };
 
     const createMappingArtifact = async (mapping) => {
+      console.log('create mapping obj', mapping)
         try {
             let response = await axios.post(`/api/steps/mapping/${mapping.name}`, mapping);
             if (response.status === 200) {
@@ -206,6 +209,50 @@ const EntityTiles = (props) => {
           }
     };
 
+    const getMergingArtifacts = async () => {
+      if (props.canReadMatchMerge) {
+        try {
+          let response = await axios.get('/api/steps/merging');
+          if (response.status === 200) {
+            //let mergeArtifacts = response.data;
+            console.log('get merge artifacts', response)
+
+            setMergingArtifacts(response.data);
+          }
+            
+          } catch (error) {
+              let message = error;
+              console.error('Error while fetching matching artifacts', message);
+          }
+      }
+    };
+
+    const deleteMergingArtifact = async (mergeName) => {
+      try {
+          let response = await axios.delete(`/api/steps/merging/${mergeName}`);
+          console.log('delete response', response);
+          if (response.status === 200) {
+            updateIsLoadingFlag();
+          }
+        } catch (error) {
+            let message = error.response.data.message;
+            console.error('Error while deleting matching artifact.', message);
+        }
+  };
+
+  const createMergingArtifact = async (mergingObj) => {
+      try {
+          let response = await axios.post(`/api/steps/merging/${mergingObj.name}`, mergingObj);
+          console.log('create merge artifact repsone', response)
+          if (response.status === 200) {
+            updateIsLoadingFlag();
+          }
+        } catch (error) {
+          let message = error.response.data.message;
+          console.error('Error While creating the matching artifact!', message);
+        }
+  };
+
     const getCustomArtifacts = async () => {
         try {
             if(props.canReadCustom){
@@ -225,7 +272,7 @@ const EntityTiles = (props) => {
         }
     };
 
-    const outputCards = (index, entityType, mappingCardData, matchingCardData, customCardData) => {
+    const outputCards = (index, entityType, mappingCardData, matchingCardData, mergingCardData, customCardData) => {
         let output;
         if (viewData[index] === 'map-' + entityType) {
             output = <div className={styles.cardView}>
@@ -265,10 +312,16 @@ const EntityTiles = (props) => {
         else if(viewData[index] === 'merge-' + entityType) {
           output = <div className={styles.cardView}>
                 <MergingCard
-                entityName={entityType}
-                entityModel={props.entityModels[entityType]}
-                canReadMatchMerge={props.canReadMatchMerge}
-                canWriteMatchMerge={props.canWriteMatchMerge}
+                  mergingStepsArray={ mergingCardData ? mergingCardData.artifacts : []}
+                  flows={props.flows}
+                  entityName={entityType}
+                  entityModel={props.entityModels[entityType]}
+                  canReadMatchMerge={props.canReadMatchMerge}
+                  canWriteMatchMerge={props.canWriteMatchMerge}
+                  deleteMergingArtifact={deleteMergingArtifact}
+                  createMergingArtifact={createMergingArtifact}
+                  addStepToFlow={props.addStepToFlow}
+                  addStepToNew={props.addStepToNew}
                 />
         </div>;
         }
@@ -310,7 +363,7 @@ const EntityTiles = (props) => {
                         </Menu.Item>: null}
                     </Menu>
                     </div>
-                    {outputCards(index, entityType, mappingArtifacts.find((artifact) => artifact.entityTypeId ===  entityModels[entityType].entityTypeId),matchingArtifacts.find((artifact) => artifact.entityTypeId === entityModels[entityType].entityTypeId), customArtifactsWithEntity.find((artifact) => artifact.entityTypeId === entityModels[entityType].entityTypeId))}
+                    {outputCards(index, entityType, mappingArtifacts.find((artifact) => artifact.entityTypeId ===  entityModels[entityType].entityTypeId),matchingArtifacts.find((artifact) => artifact.entityTypeId === entityModels[entityType].entityTypeId), mergingArtifacts.find((artifact) => artifact.entityTypeId === entityModels[entityType].entityTypeId), customArtifactsWithEntity.find((artifact) => artifact.entityTypeId === entityModels[entityType].entityTypeId))}
                 </Panel>
             ))}
             {requiresNoEntityTypeTile  ?

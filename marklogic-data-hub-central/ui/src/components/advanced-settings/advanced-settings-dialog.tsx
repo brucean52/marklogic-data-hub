@@ -86,6 +86,7 @@ const AdvancedSettingsDialog = (props) => {
   const canReadWrite = props.canWrite;
 
   useEffect(() => {
+    console.log('advance artifact')
     getSettingsArtifact();
 
     return () => {

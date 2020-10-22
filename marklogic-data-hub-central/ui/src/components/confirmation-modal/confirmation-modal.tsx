@@ -45,8 +45,14 @@ const ConfirmationModal: React.FC<Props> = (props) => {
       size="default"
       loading={loading}
       onClick={() => {
-        if (props.type !== ConfirmationType.NavigationWarn) {
-          toggleLoading(true);
+        switch(props.type) {
+          // non async confirm types
+          case ConfirmationType.NavigationWarn:
+          case ConfirmationType.DiscardChanges:
+            break;
+          default: 
+            toggleLoading(true);
+            break;
         }
         props.confirmAction();
       }}
@@ -259,6 +265,11 @@ const ConfirmationModal: React.FC<Props> = (props) => {
             >Are you sure you want to add <b>{props.boldTextArray[0]}</b> to flow <b>{props.boldTextArray[1]}</b>?
           </p>
         }
+
+        {props.type === ConfirmationType.DiscardChanges &&
+          <p aria-label="discard-changes-text">Discard Changes?</p>
+        }
+        
       </div>
     </Modal>
   );
