@@ -1,6 +1,6 @@
 import React, {useState, useContext} from "react";
 import {Link, useHistory} from "react-router-dom";
-import {Card, Icon, Row, Col, Select} from "antd";
+import {Card, Icon, Row, Col, Select, Dropdown, Menu} from "antd";
 import {MLTooltip} from "@marklogic/design-system";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSlidersH} from "@fortawesome/free-solid-svg-icons";
@@ -102,6 +102,14 @@ const MatchingCard: React.FC<Props> = (props) => {
     //handleStepAdd(obj.mappingName, obj.flowName);
   }
 
+  function handleSelectAddRun(obj) {
+    let selectedNew = {...selected};
+    selectedNew[obj.loadName] = obj.flowName;
+    setSelected(selectedNew);
+    // setAddRun(true);
+    // handleStepAdd(obj.mappingName, obj.flowName);
+  }
+
   const confirmAction = () => {
     if (confirmType === ConfirmationType.AddStepToFlow) {
       // TODO add step to new flow
@@ -115,6 +123,40 @@ const MatchingCard: React.FC<Props> = (props) => {
     setActiveStep(matchingStep, props.entityModel["model"]["definitions"], props.entityName);
     history.push({pathname: "/tiles/curate/match"});
   };
+
+  const menu = (name) => (
+    <Menu style={{right: "80px"}}>
+      <Menu.Item key="0">
+        { <Link data-testid="link" id="tiles-add-run" to={
+          {pathname: "/tiles/run/add-run",
+            state: {
+              stepToAdd: name,
+              stepDefinitionType: "matching",
+              targetEntityType: props.entityModel.entityTypeId,
+              existingFlow: false
+            }}}><div className={styles.stepLink} data-testid={`${name}-run-toNewFlow`}>Run step in a new flow</div></Link>}
+      </Menu.Item>
+      <Menu.Item key="1">
+        <div className={styles.stepLinkExisting} data-testid={`${name}-run-toExistingFlow`}>Run step in an existing flow
+          <div className={styles.stepLinkSelect} onClick={(event) => { event.stopPropagation(); event.preventDefault(); }}>
+            <Select
+              style={{width: "100%"}}
+              value={selected[name] ? selected[name] : undefined}
+              onChange={(flowName) => handleSelectAddRun({flowName: flowName, mappingName: name})}
+              placeholder="Select Flow"
+              defaultActiveFirstOption={false}
+              disabled={!props.canWriteFlow}
+              data-testid={`${name}-run-flowsList`}
+            >
+              { props.flows && props.flows.length > 0 ? props.flows.map((f, i) => (
+                <Option aria-label={`${f.name}-run-option`} value={f.name} key={i}>{f.name}</Option>
+              )) : null}
+            </Select>
+          </div>
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
 
   const renderCardActions = (step, index) => {
     return [
@@ -139,15 +181,24 @@ const MatchingCard: React.FC<Props> = (props) => {
         </i>
       </MLTooltip>,
 
-      // <MLTooltip title={'Settings'} placement="bottom">
-      //   <Icon
-      //     type="setting"
-      //     key="setting"
-      //     role="settings-merging button"
-      //     data-testid={step.name+'-settings'}
-      //     onClick={() => stepSettingsClicked(index)}
-      //     />
-      // </MLTooltip>,
+      <Dropdown
+        data-testid={`${step.name}-dropdown`}
+        overlay={menu(step.name)}
+        trigger={["click"]}
+        disabled = {!props.canWriteFlow}
+      >
+        {props.canReadMatchMerge ? (
+          <MLTooltip title={"Run"} placement="bottom">
+            <i aria-label="icon: run">
+              <Icon type="play-circle" theme="filled" className={styles.runIcon} data-testid={step.name+"-run"}/></i>
+          </MLTooltip>
+        ) : (
+          <MLTooltip title={"Run: " + SecurityTooltips.missingPermission} placement="bottom" overlayStyle={{maxWidth: "200px"}}>
+            <i role="disabled-run-mapping button" data-testid={step.name+"-disabled-run"}>
+              <Icon type="play-circle" theme="filled" onClick={(event) => event.preventDefault()} className={styles.disabledIcon}/></i>
+          </MLTooltip>
+        )}
+      </Dropdown>,
 
       props.canWriteMatchMerge ? (
         <MLTooltip title={"Delete"} placement="bottom">
