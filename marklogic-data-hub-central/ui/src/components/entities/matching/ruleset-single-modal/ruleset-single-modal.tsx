@@ -229,19 +229,23 @@ const MatchRulesetModal: React.FC<Props> = (props) => {
     event.preventDefault();
     let propertyErrorMessage = "";
     let matchErrorMessage = "";
+    let rulesetName = "";
+    let propertyName = selectedProperty || "";
 
     if (selectedProperty === "" || selectedProperty === undefined) {
       propertyErrorMessage = "A property to match is required";
     }
     if (matchType === "" || matchType === undefined) {
       matchErrorMessage = "A match type is required";
+    } else {
+      rulesetName = `${propertyName} -  ${matchType.charAt(0).toUpperCase() + matchType.slice(1)}`;
     }
+
     switch (matchType) {
     case "exact":
     case "reduce":
     case "zip":
-    {
-      let propertyName = selectedProperty || "";
+    {      
 
       let matchRule: MatchRule = {
         entityPropertyPath: propertyName,
@@ -250,7 +254,7 @@ const MatchRulesetModal: React.FC<Props> = (props) => {
       };
 
       let matchRuleset: MatchRuleset = {
-        name: propertyName,
+        name: rulesetName,
         weight: Object.keys(props.editRuleset).length !== 0 ? props.editRuleset["weight"] : 0,
         matchRules: [matchRule]
       };
@@ -282,7 +286,7 @@ const MatchRulesetModal: React.FC<Props> = (props) => {
       };
 
       let matchRuleset: MatchRuleset = {
-        name: propertyName,
+        name: rulesetName,
         weight: Object.keys(props.editRuleset).length !== 0 ? props.editRuleset["weight"] : 0,
         matchRules: [synonymMatchRule]
       };
@@ -320,7 +324,7 @@ const MatchRulesetModal: React.FC<Props> = (props) => {
       };
 
       let matchRuleset: MatchRuleset = {
-        name: propertyName,
+        name: rulesetName,
         weight: Object.keys(props.editRuleset).length !== 0 ? props.editRuleset["weight"] : 0,
         matchRules: [doubleMetaphoneMatchRule]
       };
@@ -359,7 +363,7 @@ const MatchRulesetModal: React.FC<Props> = (props) => {
       };
 
       let matchRuleset: MatchRuleset = {
-        name: propertyName,
+        name: rulesetName,
         weight: Object.keys(props.editRuleset).length !== 0 ? props.editRuleset["weight"] : 0,
         matchRules: [customMatchRule]
       };
