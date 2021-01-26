@@ -16,10 +16,3 @@ export enum ConfirmationType {
   AddStepToFlow = "addStepToFlow",
   DiscardChanges = "discardChanges"
 }
-
-declare global {
-  interface Window {
-    pendo: any,
-    usePendo: any
-  }
-}

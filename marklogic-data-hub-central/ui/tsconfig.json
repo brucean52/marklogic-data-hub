@@ -18,10 +18,13 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "noFallthroughCasesInSwitch": false
   },
   "include": [
     "src"
   ],
-  "exclude": ["src/setupProxy.js"]
+  "exclude": [
+    "src/setupProxy.js"
+  ]
 }
